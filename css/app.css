@@ -1,0 +1,52 @@
+.nopadding .padding {
+	margin: 0px;
+	padding: 0px;
+}
+
+@font-face {
+  font-family: 'Arabic Typesetting';
+  src: url('../assets/arabtype.ttf');
+  } /* IE9 Compat Modes */
+
+.bar-header .title {
+	font-size: 1.4em;
+}
+
+h1.krossware {
+	color: #0095dd;
+	text-align: center;
+	font-size: 3em;
+}
+
+p.krossware {
+	text-align: center;
+	padding: 0 1em;
+}
+
+.suralist:nth-child(even) {
+	background-color: #F1FFF1 !important;
+}
+
+#suraview > div > p:nth-child(even)  {
+	font-size: 1.3em;
+	line-height: 1.4em;
+	background-color: white;
+	padding: 1em;
+	margin:0;
+}
+
+#suraview > div > p:nth-child(odd) {
+	font-size:2.2em;
+	background-color: #00900C;
+	color: #fff;
+	padding: 1em;
+	line-height: 2.1em;
+	direction: rtl;
+	font-family: 'Arabic Typesetting';
+}
+
+audio {
+	width: 100%;
+	margin: 0 0 -5px 0;
+	background-color: #00900C;
+}
