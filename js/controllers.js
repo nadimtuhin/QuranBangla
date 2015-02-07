@@ -1,10 +1,17 @@
 angular.module('app.controllers', [])
 
 .controller("SurahCtrl", ['$scope','$stateParams','SurahService', 'BoxService','$sce', 
-    function ($scope,$stateParams,SurahService,BoxService,$sce) {  
+    function ($scope,$stateParams,SurahService,BoxService,$sce) {
+        var surahBox = new BoxService(1000, 3); //load 3 lines each turn
+        $scope.bufstate = false;
+        $scope.ayahs = [];
+
+
         //load surah from json
         SurahService.loadSurah($stateParams.surahId).then(function(surah){
+            surahBox.setSource(surah.ayahs);
             $scope.surah = surah;
+
             $scope.surah.audio_src = $sce.trustAsResourceUrl('http://www.ourholyquran.com/surah/arabic/' + $stateParams.surahId + '.mp3');
 
             document.getElementsByTagName('audio')[0].addEventListener('error', function(e) {
@@ -26,6 +33,17 @@ angular.module('app.controllers', [])
                 $scope.$apply();
             });
         });
+
+        $scope.loadDown = function() {
+            console.log('loading down');
+            $scope.ayahs = surahBox.down();
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        };
+
+        $scope.canLoadDown = function(){
+            console.log('can we load more offscreen ayahs? ' + (surahBox.canLoadDown() ? "why not":"nope"));
+            return surahBox.canLoadDown();
+        };
 }])
 
 .controller("SurahListCtrl", ['$scope','$stateParams','SurahListService','$ionicLoading', 'BoxService',
