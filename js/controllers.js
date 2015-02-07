@@ -35,11 +35,24 @@ angular.module('app.controllers', [])
 
 }])
 
-.controller("SurahListCtrl", ['$scope','$stateParams','SurahListService',
-    function ($scope,$stateParams,SurahListService) {
+.controller("SurahListCtrl", ['$scope','$stateParams','SurahListService','$ionicLoading', 'BoxService',
+    function ($scope,$stateParams,SurahListService,$ionicLoading, BoxService) {
+        var surahListBox = new BoxService(114, 10); //because we have 114 surahs, load 10 each time
         $scope.surahs = [];
 
         SurahListService.then(function(list){
-            $scope.surahs = list;
+            surahListBox.setSource(list);
         });
+
+        $scope.loadMore = function() {
+            console.log('loading more surahs');
+            $scope.surahs = surahListBox.down();
+            
+            $scope.$broadcast('scroll.infiniteScrollComplete');
+        };
+
+        $scope.moreDataCanBeLoaded = function(){
+            console.log('can we load more surahs? ' + (surahListBox.canLoadDown() ? "why not":"nope"));
+            return surahListBox.canLoadDown() ;
+        };
 }]);
