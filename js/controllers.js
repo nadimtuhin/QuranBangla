@@ -1,5 +1,41 @@
 angular.module('app.controllers', [])
 
+.controller("AppCtrl", ['$scope','$ionicPopover', '$ionicScrollDelegate',
+    function($scope, $ionicPopover, $ionicScrollDelegate){
+
+        //todo: save the settings in localStorage
+        $scope.medium = {
+            showArabic: true, 
+            showBangla: true,
+            reset: function(){
+                $scope.medium.showArabic = $scope.medium.showBangla = true;
+                $scope.closePopover();
+            }
+        }
+
+        $ionicPopover.fromTemplateUrl('moreMenu', {
+            scope: $scope,
+        }).then(function(popover) {
+            $scope.popover = popover;
+        });
+
+        $scope.openPopover = function($event) {
+            $scope.popover.show($event);
+        };
+
+        $scope.closePopover = function() {
+            $scope.popover.hide();
+        };
+
+        $scope.scrollTop = function() {
+            $ionicScrollDelegate.scrollTop();
+        };
+
+        $scope.scrollBottom = function() {
+            $ionicScrollDelegate.scrollBottom();
+        };
+}])
+
 .controller("SurahCtrl", ['$scope','$stateParams','SurahService','BoxService','AudioSurahService', '$q',
     function ($scope,$stateParams,SurahService,BoxService,AudioSurahService,$q) {
         var surahBox = new BoxService(1000, 3); //load 3 lines each turn

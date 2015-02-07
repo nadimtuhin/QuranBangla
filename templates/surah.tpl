@@ -8,8 +8,8 @@
     <ion-content class="has-header" padding="true" id="suraview">
         <ion-list class='ayahs'>
             <ion-item class="item item-complex" ng-repeat="ayah in ayahs track by $index">
-                <p class='arabic'>{{ayah.ar}}</p>
-                <p class='bangla'>
+                <p ng-show="medium.showArabic" class='arabic'>{{ayah.ar}}</p>
+                <p ng-show="medium.showBangla" class='bangla'>
                   <span ng-if="ayah.line">{{(ayah.line)}}. </span>{{ayah.bn}}
                 </p>
             </ion-item>

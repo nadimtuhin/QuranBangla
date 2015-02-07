@@ -14,13 +14,45 @@
     <script src="js/services.js"></script>
   </head>
   <body ng-app="app" animation="no-animation" ng-csp>
-  <div style="">
-    <div style="">
+    <div ng-controller="AppCtrl">
+      
         <ion-nav-bar class="bar-balanced">
             <ion-nav-back-button class="button-icon icon ion-ios7-arrow-back">&nbsp;&nbsp;&nbsp;&nbsp;</ion-nav-back-button>
+            <ion-nav-buttons side="right">
+              <button class="button button-icon icon ion-more" ng-click="openPopover($event)"></button>
+            </ion-nav-buttons>
         </ion-nav-bar>
         <ion-nav-view></ion-nav-view>
+
+        <script type="text/ng-template" id="moreMenu">
+          <ion-popover-view style="width:150px;height:360px">
+            <ion-content>
+              <div class="list">
+                <div class="item item-icon-left" ng-click="scrollTop()">
+                  <i class="icon icon ion-arrow-up-b"></i> Top
+                </div>
+                <div class="item item-icon-left" ng-click="scrollBottom()">
+                  <i class="icon icon ion-arrow-down-b"></i> Bottom
+                </div>
+                <div class="item item-divider"> Settings </div>
+                <div class="item item-checkbox">
+                  <label class="checkbox"> <input ng-change="scrollTop()" type="checkbox" ng-model="medium.showArabic"> </label>
+                  Arabic
+                </div>
+                <div class="item item-checkbox">
+                  <label class="checkbox"> <input ng-change="scrollTop()" type="checkbox" ng-model="medium.showBangla"> </label>
+                  Bangla
+                </div>
+                <div class="item item-icon-left" ng-click="medium.reset()">
+                  <i class="icon icon ion-refresh"></i> Reset
+                </div>
+                <div class="item item-icon-left" ng-click="closePopover()">
+                  <i class="icon icon ion-ios7-close"></i> Close
+                </div>
+              </div>
+            </ion-content>
+          </ion-popover-view>
+        </script>
     </div>
-</div>
   </body>
 </html>
