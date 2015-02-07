@@ -50,3 +50,28 @@ audio {
 	margin: 0 0 -5px 0;
 	background-color: #00900C;
 }
+
+
+
+/*Nadim Tuhin - 03.02.2015*/
+.ayahs .item, .ayahs .item p{ 
+	white-space: initial; /*ayahs are more than one line in general*/
+}
+p.bangla {
+	font-size: 1.3em;
+	line-height: 1.4em;
+	background-color: white;
+	padding: 1em;
+	margin:0;
+}
+
+p.arabic {
+	font-size:2em;
+	background-color: #00900C;
+	color: #fff;
+	padding: 1em;
+	line-height: 1.5em;
+	direction: rtl;
+	margin:0;
+	font-family: 'Arabic Typesetting';
+}

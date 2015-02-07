@@ -93,3 +93,61 @@ angular.module('app.services', [])
 
     return Box;
 })
+
+.factory('SurahService',['$http', "$q", function($http, $q){
+    var surahs = {}, redecorateSurah, loadSurah;
+
+    redecorateSurah = function(surah){
+        var ayahs, arabicAyahs, banglaAyahs;
+        
+        arabicAyahs =_.filter(surah.ayahs, function(ayah, index){
+            return (index+2) % 2; // returns true on 0,2,4,6
+        });
+        
+        banglaAyahs =_.filter(surah.ayahs, function(ayah, index){
+            return !(index % 2); // returns true on 1,3,5,7
+        });
+
+        ayahs = _.zip(banglaAyahs, arabicAyahs);
+        
+        ayahs = _.map(ayahs, function(ayah, index){
+            return {
+                ar: ayah[0],
+                bn: ayah[1],
+                line: index+1
+            };
+        });
+
+        surah.ayahs = ayahs;
+
+        return surah;
+    };
+
+
+    loadSurah = function(surahId){
+        var deferred = $q.defer(), 
+            url = "/js/res/surahs/" + surahId + ".json";
+
+        //if we have a cache do not load it from url
+        if(surahs[surahId]){
+            deferred.resolve(surahs[surahId]);
+            return deferred.promise;            
+        }
+
+        //as we do not have cache lets load it
+        $http.get(url).then(function(res){
+            deferred.resolve(redecorateSurah(res.data));
+        });
+
+        //cache it
+        deferred.promise.then(function(surah){
+            surahs[surahId] = surah;
+        });
+
+        return deferred.promise;
+    }
+
+    return {
+        loadSurah: loadSurah
+    };
+}])
