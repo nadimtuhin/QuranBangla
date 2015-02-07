@@ -1,38 +1,56 @@
 angular.module('app.controllers', [])
 
-.controller("SurahCtrl", ['$scope','$stateParams','SurahService', 'BoxService','$sce', 
-    function ($scope,$stateParams,SurahService,BoxService,$sce) {
+.controller("SurahCtrl", ['$scope','$stateParams','SurahService','BoxService','AudioSurahService', '$q',
+    function ($scope,$stateParams,SurahService,BoxService,AudioSurahService,$q) {
         var surahBox = new BoxService(1000, 3); //load 3 lines each turn
+        var audio = document.getElementsByTagName('audio');
+        var surahLoaded = $q.defer(), audioLoading = $q.defer();
+
         $scope.bufstate = false;
         $scope.ayahs = [];
-
+        
 
         //load surah from json
         SurahService.loadSurah($stateParams.surahId).then(function(surah){
             surahBox.setSource(surah.ayahs);
             $scope.surah = surah;
 
-            $scope.surah.audio_src = $sce.trustAsResourceUrl('http://www.ourholyquran.com/surah/arabic/' + $stateParams.surahId + '.mp3');
+            surahLoaded.resolve();
+        });
 
-            document.getElementsByTagName('audio')[0].addEventListener('error', function(e) {
+        //load audio stream after surah loaded
+        surahLoaded.promise.then(function(){
+            $scope.surah.audio_src = AudioSurahService.getSrc($stateParams.surahId);
+            
+            audio[0].addEventListener('error', function(e) {
                 alert("Unable to fetch data, please check your internet connection.")
-            });
-            $scope.play = function() {
-                document.getElementsByTagName('audio')[0].play();
-                $scope.bufstate = true;
-            };
-            $scope.pause = function() {
-                document.getElementsByTagName('audio')[0].pause();
-            };
-            $scope.stop = function() {
-                  $scope.pause();
-                  document.getElementsByTagName('audio')[0].currentTime = 0;
-            };
-            document.getElementsByTagName('audio')[0].addEventListener('canplay', function() {
                 $scope.bufstate = false;
+                console.log('bufstate is '+$scope.bufstate);
+            });
+
+            audio[0].addEventListener('canplay', function() {
+                $scope.bufstate = false;
+                console.log('canplay .. bufstate is '+$scope.bufstate);
                 $scope.$apply();
             });
         });
+
+
+
+        $scope.play = function() {
+            audio[0].play();
+            console.log('bufstate is '+$scope.bufstate);
+            $scope.bufstate = true;
+        };
+        $scope.pause = function() {
+            audio[0].pause();
+        };
+        $scope.stop = function() {
+              $scope.pause();
+              audio[0].currentTime = 0;
+              console.log('bufstate is '+$scope.bufstate);
+        };
+
 
         $scope.loadDown = function() {
             console.log('loading down');
@@ -44,6 +62,7 @@ angular.module('app.controllers', [])
             console.log('can we load more offscreen ayahs? ' + (surahBox.canLoadDown() ? "why not":"nope"));
             return surahBox.canLoadDown();
         };
+
 }])
 
 .controller("SurahListCtrl", ['$scope','$stateParams','SurahListService','$ionicLoading', 'BoxService',

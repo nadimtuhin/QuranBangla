@@ -1,5 +1,19 @@
 angular.module('app.services', [])
 
+//in future we will cache a few surahs so we need a dedicated service
+.factory('AudioSurahService', ['$sce', function($sce){
+    var getSrc = function(surahId){
+        var url = 'http://www.ourholyquran.com/surah/arabic/' + surahId + '.mp3';
+        // url = '1001.mp3';
+        return $sce.trustAsResourceUrl(url);
+    };
+
+    return {
+        getSrc: getSrc
+    };
+}])
+
+
 .factory('SurahListService', ['$http', "$q", function($http, $q){
     var deferred = $q.defer();
 
