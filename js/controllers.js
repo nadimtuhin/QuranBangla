@@ -35,11 +35,11 @@ angular.module('app.controllers', [])
 
 }])
 
-.controller("SurahListCtrl", ['$scope','$stateParams','FeedService','$ionicLoading', function ($scope,$stateParams,Feed,$ionicLoading) {  
-	try {
-        Feed.parseFeedNoGoogle("/js/res/surah_list.json").then(function(res){
-        	$scope.surahs = res.data;
+.controller("SurahListCtrl", ['$scope','$stateParams','SurahListService',
+    function ($scope,$stateParams,SurahListService) {
+        $scope.surahs = [];
+
+        SurahListService.then(function(list){
+            $scope.surahs = list;
         });
-    }
-    catch(e) {}
 }]);

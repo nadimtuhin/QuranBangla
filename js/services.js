@@ -10,3 +10,13 @@ angular.module('app.services', [])
         }
     }
 }])
+
+.factory('SurahListService', ['$http', "$q", function($http, $q){
+    var deferred = $q.defer();
+    
+    $http.get('/js/res/surah_list.json').then(function(res){
+        deferred.resolve(res.data);
+    });
+
+    return deferred.promise;
+}])
